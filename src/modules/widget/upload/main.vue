@@ -96,7 +96,7 @@ export default{
                     return file.uptoken;
                 },
                 get_new_uptoken: true,
-                domain: 'http://xinghuo.vnest.net',     // bucket 域名，下载资源时用到，如：'http://xxx.bkt.clouddn.com/' **必需**
+                domain: 'http://card.vnest.net',     // bucket 域名，下载资源时用到，如：'http://xxx.bkt.clouddn.com/' **必需**
                 max_file_size: '1000mb',             // 最大文件体积限制
                 flash_swf_url: '/static/plupload/js/Moxie.swf',  //引入 flash,相对路径
                 max_retries: 3,                     // 上传失败最大重试次数

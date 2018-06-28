@@ -16,7 +16,7 @@ const state = {
       path:"/account",
       uuid:"account",
     },{
-      name:"车库管理",
+      name:"产品管理",
       path:"/cars",
       uuid:"cars",
     },

@@ -1,8 +1,8 @@
 <template>
 	<div ref="container" class="list_wrapper">
-		<div ref="operate" class="operate">
+		<!-- <div ref="operate" class="operate">
 			<el-button  @click="goNewAccount" type="primary">新增用户</el-button>
-		</div>
+		</div> -->
 		<div class="filter_list">
 			<el-table
 			    ref="multipleTable"
@@ -13,34 +13,45 @@
 			    style="width: 100%"
 			    @selection-change="">
 			    <el-table-column
+			   	  prop="mobile"
 			      label="手机号码"
 			      show-overflow-tooltip>
 			    </el-table-column>
 			    <el-table-column
+			      prop="wechatId"
 			      label="微信id"
 			      show-overflow-tooltip>
 			    </el-table-column>
 			    <el-table-column
 			      label="注册时间"
 			      show-overflow-tooltip>
+			      <template slot-scope="scope">{{ scope.row.createDate | timesToDate('yyyy-MM-dd HH:mm:ss') }}</template>
 			    </el-table-column>
 			    <el-table-column
 			      label="最近一次登录"
 			      show-overflow-tooltip>
+			      <template slot-scope="scope">{{ scope.row.lastUpDate | timesToDate('yyyy-MM-dd HH:mm:ss') }}</template>
 			    </el-table-column>
 			    <el-table-column label="操作" width="260" fixed="right">
 			      <template slot-scope="scope">
 			      	<el-button
+			      	  v-if="scope.row.status == 1"
 			          size="mini"
-			          @click="">禁用</el-button>
+			          type="danger"
+			          @click="modifyAccount(scope.row,0)">禁用</el-button>
+		<!-- 	        <el-button
+			          v-if="scope.row.status == -1"
+			          size="mini"
+			          @click="">编辑</el-button> -->
 			        <el-button
+			          v-if="scope.row.status == 0"
 			          size="mini"
 			          type="primary"
-			          @click="">编辑</el-button>
+			          @click="modifyAccount(scope.row,1)">启用</el-button>
 			        <el-button
 			          size="mini"
 			          type="danger"
-			          @click="">删除</el-button>
+			          @click="deleteAccount(scope.row,scope.$index)">删除</el-button>
 			      </template>
 			    </el-table-column>
 
@@ -49,12 +60,9 @@
 		</div>
 		<div ref="page" class="page">
 			<el-pagination
-		      @size-change="handleSizeChange"
 		      @current-change="handleCurrentChange"
-		      :current-page="currentPage"
-		      :page-sizes="[10,20, 30, 40, 50]"
 		      :page-size="limit"
-		      layout="total, sizes, prev, pager, next, jumper"
+		      layout="prev, pager, next"
 		      :total="total">
 		    </el-pagination>
 		</div>
@@ -62,13 +70,10 @@
 </template>
 <script>
 	import {mapGetters,mapActions} from 'vuex';
-	import NewAccount from  '@/modules/widget/new-account'
 	export default{
 		data(){
 			return {
-				list:[{
-					mobile:"18311344273"
-				}],
+				list:[],
 				tableHeight:200,
 				total:0,
 				currentPage:1,
@@ -85,21 +90,49 @@
 			handleSizeChange(){
 
 			},
-			handleCurrentChange(){
-
+			handleCurrentChange(page){
+				let start = (page-1)*this.limit;
+				this.getAccountlist(start);
 			},
 			setHeight(){
 		    	var container = this.$refs.container.offsetHeight;
-		    	var operate = this.$refs.operate.offsetHeight;
 		    	var page = this.$refs.page.offsetHeight;
-		    	var tableHeight = container - operate -page -24;
+		    	var tableHeight = container -page -24;
 		    	console.log(tableHeight);
 		    	this.tableHeight = tableHeight;
 		    },
-		    goNewAccount(){
-		    	NewAccount({
-		    		
+		    getAccountlist(start){
+		    	start = start || 0;
+		    	$API.account.getAccountList({start,limit:this.limit},(data) => {
+		    		this.list = data.list;
+		    		this.total = data.count;
 		    	})
+		    },
+		    modifyAccount(data,status){
+		    	var account = {
+		    		uuid:data.uuid,
+		    		status
+		    	}
+		    	$API.account.modifyAccount({account},(data) => {
+		    		this.getAccountlist();
+		    	})
+		    },
+		    deleteAccount(data,index){
+		    	this.$confirm('确定要删除该账号吗？', '提示', {
+		          confirmButtonText: '确定',
+		          cancelButtonText: '取消',
+		          type: 'warning'
+		        }).then(() => {
+		        	$API.account.deleteAccount({account_id:data.uuid},() => {
+		        		this.list.splice(index,1);
+			          	this.$message({
+			            	type: 'success',
+			            	message: '删除成功!'
+			          	});
+		        	})
+		        }).catch(() => {
+		                   
+		        });
 		    }
 	    },
 	  
@@ -109,7 +142,7 @@
 	    	})
 	    },
 		created(){
-
+			this.getAccountlist();
 		}
 	}
 </script>

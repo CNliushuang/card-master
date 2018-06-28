@@ -1,5 +1,5 @@
-import Group from './modules/group.js'
+import Account from './modules/account.js'
 export default{
-  ...Group,
+  ...Account,
 }
 

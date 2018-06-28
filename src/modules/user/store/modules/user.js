@@ -28,10 +28,6 @@ const actions = {
 		return new Promise((resolve,reject)=>{
 			$API.user.login({identify,password}, resp => {
         		commit(types.INIT_USER_INFO, resp)
-        		if(resp.user && resp.user.authorityGroupId){
-					dispatch('getUserAuthorities',{uuid:resp.user.authorityGroupId})
-				}
-
         	
 
 				resolve(resp);
@@ -44,9 +40,6 @@ const actions = {
 	    return new Promise((resolve, reject) => {
 			$API.user.userMy(resp => {
 				commit(types.GET_USER_MY_INFO, resp)
-				if(resp.user && resp.user.authorityGroupId){
-					dispatch('getUserAuthorities',{uuid:resp.user.authorityGroupId})
-				}
         		
 				resolve(resp);
 			},resp => {
@@ -54,17 +47,7 @@ const actions = {
 			})
 	    })
 	},
-	
-	getUserAuthorities ({commit, state,dispatch}, {uuid}){
-		return new Promise((resolve,reject)=>{
-			$API.limit.getAccountGroupDetail({uuid}, resp => {
-        		commit(types.INIT_USER_AUTHORITIES, resp)
-				resolve(resp);
-			},resp => {
-				resolve(resp);
-			})
-	    })
-	},
+
 	getUserDetail({ commit, state, dispatch },{user_id}){
 		return new Promise((resolve, reject) => {
 			$API.user.getUserDetail({user_id},resp => {

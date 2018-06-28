@@ -1,5 +1,7 @@
 import axios from 'axios'
 import User from '@/modules/user/api'
+import Account from '@/modules/account/api'
+import Cars from '@/modules/cars/api'
 
 
 axios.interceptors.request.use(config => {
@@ -39,4 +41,6 @@ global.$axios = axios.create({
 // $req.use(unauthorizedRedirect)
 global.$API = {
   user: User,
+  account:Account,
+  cars:Cars
 };
