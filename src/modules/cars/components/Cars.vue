@@ -44,11 +44,11 @@
 				    tooltip-effect="dark"
 				    style="width: 100%"
 				    @selection-change="">
-				    <el-table-column
+<!-- 				    <el-table-column
 				    	prop="brandName"
 				      label="品牌"
 				      show-overflow-tooltip>
-				    </el-table-column>
+				    </el-table-column> -->
 				    <el-table-column
 				    	prop="typeName"
 				      label="车系"
@@ -320,7 +320,7 @@
   			display: flex;
   			flex-direction: row;
   			.tree_box{
-  				width: 300px;
+  				width: 400px;
   				flex-shrink: 0;
   				border-right: 1px solid #ebeef5;
   			}

@@ -65,6 +65,7 @@
     import * as api from './api';
     import Modal from '@/modules/widget/common/Modal.vue';
     import Upload from '@/modules/widget/upload'
+    import CropImage from '@/modules/widget/crop-img'
 
 
     export default{
@@ -133,12 +134,21 @@
                 })
             },
             goUpload(){
-                Upload({
-                    callback:(data) => {
-                        console.log(data);
-                        this.productType.cover = data[0].url;
+                CropImage({
+                    callback:(file) => {
+                         this.productType.cover = file.url;
                     }
                 })
+
+
+
+
+                // Upload({
+                //     callback:(data) => {
+                //         console.log(data);
+                //         this.productType.cover = data[0].url;
+                //     }
+                // })
             }
 
         },

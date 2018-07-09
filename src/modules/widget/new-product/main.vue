@@ -70,6 +70,7 @@
     import Modal from '@/modules/widget/common/Modal.vue';
     import Editor from '@/config/quill'
     import Upload from '@/modules/widget/upload'
+    import CropImage from '@/modules/widget/crop-img'
 
 
     export default{
@@ -131,22 +132,37 @@
                 this.content.push(temp)
             },
             goAddImage(){
-                Upload({
-                    callback:(data) => {
+                CropImage({
+                    callback:(file) => {
                         var temp = {
                             type:"image",
-                            url:data[0].url
+                            url:file.url
                         }
                         this.content.push(temp);
                     }
                 })
+                // Upload({
+                //     callback:(data) => {
+                //         var temp = {
+                //             type:"image",
+                //             url:data[0].url
+                //         }
+                //         this.content.push(temp);
+                //     }
+                // })
             },
             goUpload(){
-                Upload({
-                    callback:(data) => {
-                        this.product.cover = data[0].url;
+                CropImage({
+                    callback:(file) => {
+                         this.product.cover = file.url;
                     }
                 })
+
+                // Upload({
+                //     callback:(data) => {
+                //         this.product.cover = data[0].url;
+                //     }
+                // })
             },
             deleteItems(index){
                 this.content.splice(index,1);
