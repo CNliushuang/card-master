@@ -31,6 +31,7 @@
                 <div class="content">
                     <img v-if="product.cover" :src="product.cover">
                     <el-button @click="goUpload" size="mini" type="primary">上传<i class="el-icon-upload el-icon--right"></i></el-button>
+                    <el-button @click="deleteCover" size="mini" type="danger">删除banner</el-button>
                 </div>
             </div>
             <div class="group">
@@ -151,6 +152,9 @@
                 //     }
                 // })
             },
+            deleteCover(){
+                this.product.cover = "";
+            },
             goUpload(){
                 CropImage({
                     callback:(file) => {
@@ -192,13 +196,13 @@
                 }
 
                 if(!this.product.uuid){
-                    api.newProduct({name:this.product.name,typeId:this.product.typeId,content,summary,cover},() => {
-                        this.callback && this.callback();
+                    api.newProduct({name:this.product.name,typeId:this.product.typeId,content,summary,cover},(resp) => {
+                        this.callback && this.callback(resp.product);
                         close && close();
                     })
                 }else{
-                    api.modifyProduct({uuid:this.product.uuid,name:this.product.name,typeId:this.product.typeId,content,summary,cover},() => {
-                        this.callback && this.callback();
+                    api.modifyProduct({uuid:this.product.uuid,name:this.product.name,typeId:this.product.typeId,content,summary,cover},(resp) => {
+                        this.callback && this.callback(resp.product);
                         close && close();
                     })
                 }

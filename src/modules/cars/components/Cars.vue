@@ -215,8 +215,14 @@
 		    modifyProduct(data){
 		    	AddProduct({
 		    		product:data,
-		    		callback:() => {
-
+		    		callback:(product) => {
+		    			for(var items of this.list){
+		    				if(items.uuid == product.uuid){
+		    					items.name = product.name;
+		    					items.cover = product.cover;
+		    					items.content = product.content;
+		    				}
+		    			}
 		    		}
 		    	})
 		    },
